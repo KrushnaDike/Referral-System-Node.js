@@ -1,0 +1,1378 @@
+definitions:
+  securitySchemes:
+    tokenauth:
+      type: basic
+      description: bearer auth
+      name: Authorization
+      in: header
+    demouser:
+      type: basic
+  #-------------------------------------------------------------------
+  #---------------------------ADMIN----------------------------------
+  #-------------------------------------------------------------------
+
+  adhaarOtpVerify:
+    required:
+      - client_id
+      - otp
+    properties:
+      client_id:
+        type: string
+      otp:
+        type: string
+    example:
+      client_id: lungisa@mailinator.com
+      otp: Mobiloitte@1
+
+  adminLogin:
+    required:
+      - email
+      - password
+      - deviceToken
+      - deviceType
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+      deviceToken:
+        type: string
+      deviceType:
+        type: string
+    example:
+      email: "nandkishor.desai@indicchain.com"
+      password: "Mobiloitte@1"
+      deviceToken: "string"
+      deviceType: "string"
+
+  userSignup:
+    required:
+      - firstName
+      - surName
+      - countryCode
+      - mobileNumber
+      - email
+      - password
+      - confirmPassword
+      - dateOfBirth
+    properties:
+      email:
+        type: string
+      countryCode:
+        type: string
+      mobileNumber:
+        type: string
+      password:
+        type: string
+      confirmPassword:
+        type: string
+      referralCode:
+        type: string
+    example:
+      email: "rohit.pandit@indicchain.com"
+      countryCode: "+91"
+      mobileNumber: "7038415053"
+      password: "Rohit@123"
+      confirmPassword: "Rohit@123"
+      referralCode: "4ug8h"
+
+  verifyOTP:
+    required:
+      - email
+      - otp
+    properties:
+      email:
+        type: string
+      otp:
+        type: string
+
+  resendOTP:
+    required:
+      - email
+    properties:
+      email:
+        type: string
+
+  forgotPassword:
+    required:
+      - email
+    properties:
+      email:
+        type: string
+
+  resetPassword:
+    required:
+      - email
+      - newPassword
+    properties:
+      email:
+        type: string
+      newPassword:
+        type: string
+
+  userLogin:
+    required:
+      - email
+      - password
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+      deviceType:
+        type: string
+      deviceToken:
+        type: string
+    example:
+      email: "rohit.pandit@indicchain.com"
+      password: "Rohit@123"
+
+  loginAdmin:
+    required:
+      - email
+      - password
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+
+  socialLogin:
+    required:
+      - socialId
+      - socialType
+      - countryCode
+      - mobileNumber
+      - email
+    properties:
+      socialId:
+        type: string
+      socialType:
+        type: string
+      firstName:
+        type: string
+      lastName:
+        type: string
+      countryCode:
+        type: string
+      mobileNumber:
+        type: string
+      email:
+        type: string
+      deviceToken:
+        type: string
+
+  connectWallet:
+    required:
+      - walletAddress
+    properties:
+      walletAddress:
+        type: string
+
+  updateProfile:
+    properties:
+      firstName:
+        type: string
+      lastName:
+        type: string
+      countryCode:
+        type: string
+      mobileNumber:
+        type: string
+      email:
+        type: string
+      deviceToken:
+        type: string
+  updateAdminProfile:
+    properties:
+      name:
+        type: string
+      email:
+        type: string
+
+  changePassword:
+    required:
+      - oldPassword
+      - newPassword
+    properties:
+      oldPassword:
+        type: string
+      newPassword:
+        type: string
+
+  addExperts:
+    required:
+      - email
+      - password
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+      firstName:
+        type: string
+      surName:
+        type: string
+      countryCode:
+        type: string
+      mobileNumber:
+        type: string
+      expertType:
+        type: string
+      companyRegistrationNo:
+        type: string
+      address:
+        type: string
+      nrcNumber:
+        type: string
+      companyName:
+        type: string
+      feeAmount:
+        type: number
+      trade:
+        type: array
+        items:
+          type: string
+      commission:
+        type: string
+      userName:
+        type: string
+      confirmPassword:
+        type: string
+      verificationDocs: type:string
+      status1: type:string
+
+  deleteExperts:
+    required:
+      - expertId
+    properties:
+      agentId:
+        type: array
+        items:
+          type: string
+
+  editProfile:
+    properties:
+      firstName:
+        type: string
+      userName:
+        type: string
+      mobileNumber:
+        type: string
+      email:
+        type: string
+      countryCode:
+        type: string
+      address:
+        type: string
+      dateOfBirth:
+        type: string
+      profilePic:
+        type: string
+
+  addSubAdmin:
+    required:
+      - name
+      - userName
+      - email
+      - mobileNumber
+      - password
+      - confirmPassword
+    properties:
+      name:
+        type: string
+      userName:
+        type: string
+      email:
+        type: string
+      mobileNumber:
+        type: string
+      password:
+        type: string
+      confirmPassword:
+        type: string
+      countryCode:
+        type: string
+      dateOfBirth:
+        type: string
+      address:
+        type: string
+      permission:
+        type: object
+        properties:
+          clientsManagement:
+            type: array
+            items:
+              type: string
+          expertsManagement:
+            type: array
+            items:
+              type: string
+          deliveryManagement:
+            type: array
+            items:
+              type: string
+          inventoryManagement:
+            type: array
+            items:
+              type: string
+          serviceManagement:
+            type: array
+            items:
+              type: string
+          advertManagement:
+            type: array
+            items:
+              type: string
+          jobManagement:
+            type: array
+            items:
+              type: string
+          materialOrderManagement:
+            type: array
+            items:
+              type: string
+          earnings:
+            type: array
+            items:
+              type: string
+          categoriesManagement:
+            type: array
+            items:
+              type: string
+          couponsManagement:
+            type: array
+            items:
+              type: string
+          pushNotification:
+            type: array
+            items:
+              type: string
+
+  addCategory:
+    required:
+      - categoryName
+      - categoryType
+    properties:
+      categoryName:
+        type: string
+      categoryType:
+        type: string
+      categoryImage:
+        type: string
+      status:
+        type: string
+      metaKeyword:
+        type: array
+        items:
+          type: string
+
+  editCategory:
+    required:
+      - _id
+      - categoryName
+      - categoryType
+    properties:
+      _id:
+        type: string
+      categoryName:
+        type: string
+      categoryType:
+        type: string
+      categoryImage:
+        type: string
+      metaKeyword:
+        type: array
+        items:
+          type: string
+  editPermission:
+    properties:
+      permission:
+        type: object
+        properties:
+          clientsManagement:
+            type: array
+            items:
+              type: string
+          expertsManagement:
+            type: array
+            items:
+              type: string
+          deliveryManagement:
+            type: array
+            items:
+              type: string
+          inventoryManagement:
+            type: array
+            items:
+              type: string
+          serviceManagement:
+            type: array
+            items:
+              type: string
+          advertManagement:
+            type: array
+            items:
+              type: string
+          jobManagement:
+            type: array
+            items:
+              type: string
+          materialOrderManagement:
+            type: array
+            items:
+              type: string
+          earnings:
+            type: array
+            items:
+              type: string
+          categoriesManagement:
+            type: array
+            items:
+              type: string
+          couponsManagement:
+            type: array
+            items:
+              type: string
+          pushNotification:
+            type: array
+            items:
+              type: string
+  addService:
+    required:
+      - categoryId
+      - price
+    properties:
+      categoryId:
+        type: string
+      unit:
+        type: string
+      description:
+        type: string
+      price:
+        type: string
+      status1:
+        type: string
+      serviceImage:
+        type: string
+      metaKeyword:
+        type: array
+        items:
+          type: string
+
+  editService:
+    required:
+      - _id
+    properties:
+      _id:
+        type: string
+      categoryId:
+        type: string
+      unit:
+        type: string
+      description:
+        type: string
+      price:
+        type: string
+      status1:
+        type: string
+      serviceImage:
+        type: string
+      metaKeyword:
+        type: array
+        items:
+          type: string
+
+  addProduct:
+    required:
+      - categoryId
+      - item
+      - brand
+      - size
+      - color
+      - unit
+      - stock
+      - reorderLevel
+      - price
+      - image
+      - status1
+    properties:
+      categoryId:
+        type: string
+      item:
+        type: string
+      brand:
+        type: string
+      size:
+        type: string
+      color:
+        type: string
+      unit:
+        type: number
+      stock:
+        type: number
+      reorderLevel:
+        type: number
+      price:
+        type: number
+      status1:
+        type: string
+      image:
+        type: string
+      metaKeyword:
+        type: array
+        items:
+          type: string
+
+  addBanner:
+    required:
+      - bannerName
+      - bannerImage
+    properties:
+      bannerName:
+        type: string
+      bannerImage:
+        type: string
+
+  addAdvertiesment:
+    required:
+      - runtime
+      - advertiesmentImage
+      - description
+    properties:
+      runtime:
+        type: string
+      advertiesmentImage:
+        type: string
+      description:
+        type: string
+  deleteAgent:
+    required:
+      - agentId
+    properties:
+      agentId:
+        type: array
+        items:
+          type: string
+  deleteProduct:
+    required:
+      - productId
+    properties:
+      productId:
+        type: array
+        items:
+          type: string
+
+  bookService:
+    required:
+      - serviceId
+      - quantity
+    properties:
+      service:
+        type: array
+        items:
+          type: object
+          properties:
+            serviceId:
+              type: string
+            quantity:
+              type: string
+
+  buyMaterial:
+    required:
+      - productId
+      - quantity
+    properties:
+      product:
+        type: array
+        items:
+          type: object
+          properties:
+            productId:
+              type: string
+            quantity:
+              type: string
+
+  buyMaterialV2:
+    required:
+      - productId
+      - quantity
+      - vehicleId
+      - areaId
+    properties:
+      vehicleId:
+        type: string
+      areaId:
+        type: string
+      product:
+        type: array
+        items:
+          type: object
+          properties:
+            productId:
+              type: string
+            quantity:
+              type: string
+
+  deleteCategory:
+    required:
+      - categoryId
+    properties:
+      categoryId:
+        type: array
+        items:
+          type: string
+  deleteUser:
+    required:
+      - userId
+    properties:
+      userId:
+        type: array
+        items:
+          type: string
+  deleteAdvertiesment:
+    required:
+      - advertiesmentId
+    properties:
+      advertiesmentId:
+        type: array
+        items:
+          type: string
+
+  editAdvertiesment:
+    required:
+      - _id
+      - runtime
+      - description
+      - advertiesmentImage
+    properties:
+      _id:
+        type: string
+      runtime:
+        type: string
+      description:
+        type: string
+      advertiesmentImage:
+        type: string
+
+  editClient:
+    properties:
+      firstName:
+        type: string
+      surName:
+        type: string
+      mobileNumber:
+        type: string
+      email:
+        type: string
+      dateOfBirth:
+        type: string
+      countryCode:
+        type: string
+      status1:
+        type: string
+
+  addOrder:
+    required:
+      - prdouctId
+      - addressId
+      - quantity
+      - paymentMethod
+    properties:
+      prdouctId:
+        type: array
+      addressId:
+        type: string
+      quantity:
+        type: number
+      paymentMethod:
+        type: string
+    example:
+      prdouctId: ["123", "122"]
+      addressId: "123"
+      quantity: 2
+      paymentMethod: "credit_card"
+
+  deleteMetarial:
+    required:
+      - metarialId
+    properties:
+      metarialId:
+        type: array
+        items:
+          type: string
+
+  editCartItem:
+    properties:
+      quantity:
+        type: string
+      location:
+        type: object
+        properties:
+          type:
+            type: string
+          coordinates:
+            type: array
+            items:
+              type: integer
+
+  editUserProfile:
+    properties:
+      firstName:
+        type: string
+      surName:
+        type: string
+      countryCode:
+        type: string
+      mobileNumber:
+        type: string
+      email:
+        type: string
+      address:
+        type: string
+      dateOfBirth:
+        type: string
+
+  sendMailId:
+    required:
+      - userId
+    properties:
+      userId:
+        type: array
+        items:
+          type: string
+
+  generateOrder:
+    required:
+      - location
+      - area
+    properties:
+      area:
+        type: string
+      location:
+        type: object
+        properties:
+          type:
+            type: string
+          coordinates:
+            type: array
+            items:
+              type: number
+
+  addRating:
+    required:
+      - rating
+      - review
+    properties:
+      rating:
+        type: integer
+      review:
+        type: string
+
+  addFAQ:
+    required:
+      - question
+      - answer
+    properties:
+      question:
+        type: string
+      answer:
+        type: string
+
+  editFAQ:
+    required:
+      - _id
+      - question
+      - answer
+    properties:
+      _id:
+        type: string
+      question:
+        type: string
+      answer:
+        type: string
+  addStaticContent:
+    required:
+      - type
+      - title
+      - description
+    properties:
+      type:
+        type: string
+      title:
+        type: string
+      description:
+        type: string
+
+  editStaticContent:
+    required:
+      - _id
+      - title
+      - description
+    properties:
+      _id:
+        type: string
+      title:
+        type: string
+      description:
+        type: string
+
+  deleteStaticContent:
+    required:
+      - _id
+    properties:
+      _id:
+        type: string
+  editProduct:
+    required:
+      - categoryId
+      - _id
+    properties:
+      _id:
+        type: string
+      categoryId:
+        type: string
+      item:
+        type: string
+      brand:
+        type: string
+      size:
+        type: string
+      color:
+        type: string
+      unit:
+        type: number
+      stock:
+        type: number
+      reorderLevel:
+        type: number
+      price:
+        type: number
+      status1:
+        type: string
+      image:
+        type: string
+      metaKeyword:
+        type: array
+        items:
+          type: string
+
+  addDiscount:
+    required:
+      - name
+      - amount
+      - startDate
+      - endDate
+      - disCountType
+    properties:
+      name:
+        type: string
+      amount:
+        type: string
+      startDate:
+        type: string
+      endDate:
+        type: string
+      disCountType:
+        type: string
+      status1:
+        type: string
+      serviceId:
+        type: array
+        items:
+          type: string
+      materialId:
+        type: array
+        items:
+          type: string
+  deleteDiscount:
+    required:
+      - discountId
+    properties:
+      discountId:
+        type: array
+        items:
+          type: string
+
+  deleteManyCoupon:
+    required:
+      - couponId
+    properties:
+      couponId:
+        type: array
+        items:
+          type: string
+
+  deleteExpert:
+    required:
+      - expertId
+    properties:
+      expertId:
+        type: array
+        items:
+          type: string
+  deleteAllNotification:
+    required:
+      - notificationId
+    properties:
+      notificationId:
+        type: array
+        items:
+          type: string
+  assignOrderServiceToExperts:
+    properties:
+      expertId:
+        type: string
+      orderId:
+        type: string
+      serviceId:
+        type: array
+        items:
+          type: string
+
+  addVehicle:
+    required:
+      - vehicleType
+      - baseRate
+      - vehicleImage
+      - capacity
+    properties:
+      vehicleType:
+        type: string
+      capacity:
+        type: string
+      baseRate:
+        type: string
+      vehicleImage:
+        type: string
+
+  editVehicle:
+    required:
+      - _id
+      - vehicleType
+      - baseRate
+      - vehicleImage
+    properties:
+      _id:
+        type: string
+      vehicleType:
+        type: string
+      capacity:
+        type: string
+      baseRate:
+        type: string
+      vehicleImage:
+        type: string
+  assignOrderDeliveryAgent:
+    properties:
+      deliveryAgentId:
+        type: string
+      orderId:
+        type: string
+
+  addCurrency:
+    required:
+      - currencySymbol
+    properties:
+      currencySymbol:
+        type: string
+
+  updateCurrency:
+    required:
+      - _id
+    properties:
+      _id:
+        type: string
+      currencySymbol:
+        type: string
+
+  viewCurrency:
+    required:
+      - currencySymbol
+    properties:
+      currencySymbol:
+        type: string
+
+  deleteBanner:
+    required:
+      - bannerId
+    properties:
+      bannerId:
+        type: array
+        items:
+          type: string
+  deleteReview:
+    required:
+      - reviewId
+    properties:
+      reviewId:
+        type: array
+        items:
+          type: string
+  deleteManyVehicle:
+    required:
+      - vehicleId
+    properties:
+      vehicleId:
+        type: array
+        items:
+          type: string
+  homeScreenUpdate:
+    required:
+      - homeId
+    properties:
+      homeId:
+      type: string
+    homeScreenImage:
+      type: array
+      items:
+        type: string
+  deleteAllService:
+    required:
+      - serviceId
+    properties:
+      serviceId:
+        type: array
+        items:
+          type: string
+
+  editBanner:
+    required:
+      - _id
+    properties:
+      _id:
+        type: string
+      bannerName:
+        type: string
+      bannerImage:
+        type: array
+        items:
+          type: string
+  deleteRating:
+    required:
+      - ratingId
+    properties:
+      ratingId:
+        type: array
+        items:
+          type: string
+  deleteJob:
+    required:
+      - serviceId
+    properties:
+      serviceId:
+        type: array
+        items:
+          type: string
+  editOrderProduct:
+    required:
+      - order_Id
+      - productId
+    properties:
+      order_Id:
+        type: string
+      quantity:
+        type: string
+      area:
+        type: string
+      total:
+        type: string
+      deliveryVehicle:
+        type: string
+      deliveryFee:
+        type: string
+      location:
+        type: object
+        properties:
+          type:
+            type: string
+          coordinates:
+            type: array
+            items:
+              type: integer
+      productId:
+        type: array
+        items:
+          type: object
+          properties:
+            productDetails:
+              type: string
+            quantity:
+              type: integer
+  addCoupon:
+    required:
+      - name
+      - amount
+      - startDate
+      - endDate
+      - disCountType
+    properties:
+      name:
+        type: string
+      amount:
+        type: string
+      startDate:
+        type: string
+      endDate:
+        type: string
+      couponCode:
+        type: string
+      status1:
+        type: string
+      disCountType:
+        type: string
+      serviceId:
+        type: array
+        items:
+          type: string
+      materialId:
+        type: array
+        items:
+          type: string
+  editCoupon:
+    required:
+      - name
+      - amount
+      - startDate
+      - endDate
+      - disCountType
+      - couponId
+    properties:
+      couponId:
+        type: string
+      name:
+        type: string
+      amount:
+        type: string
+      startDate:
+        type: string
+      endDate:
+        type: string
+      couponCode:
+        type: string
+      disCountType:
+        type: string
+      status1:
+        type: string
+      serviceId:
+        type: array
+        items:
+          type: string
+      materialId:
+        type: array
+        items:
+          type: string
+  addServiceArea:
+    properties:
+      indexes:
+        type: number
+      area:
+        type: string
+      openTime:
+        type: string
+      endTime:
+        type: string
+      location:
+        type: object
+        properties:
+          type:
+            type: string
+          coordinates:
+            type: array
+            items:
+              type: integer
+
+  deleteManyServiceArea:
+    required:
+      - serviceAreaId
+    properties:
+      serviceAreaId:
+        type: array
+        items:
+          type: string
+
+  editServiceArea:
+    properties:
+      serviceAreaId:
+        type: string
+      indexes:
+        type: number
+      area:
+        type: string
+      openTime:
+        type: string
+      endTime:
+        type: string
+      location:
+        type: object
+        properties:
+          type:
+            type: string
+          coordinates:
+            type: array
+            items:
+              type: integer
+
+  applyCoupon:
+    properties:
+      couponCode:
+        type: array
+        items:
+          type: string
+
+  updateOrderRewardCoupon:
+    required:
+      - total
+    properties:
+      total:
+        type: number
+      reward:
+        type: number
+      couponCode:
+        type: array
+        items:
+          type: string
+      couponCodeAmount:
+        type: number
+
+  checkOut:
+    required:
+      - mobileNumber
+      - total
+    properties:
+      mobileNumber:
+        type: number
+      total:
+        type: number
+      reward:
+        type: number
+      couponCode:
+        type: array
+        items:
+          type: string
+      couponCodeAmount:
+        type: number
+
+  editItems:
+    properties:
+      cartIds:
+        type: array
+        items:
+          type: object
+          properties:
+            _id:
+              type: string
+            quantity:
+              type: string
+
+  adduserManual:
+    required:
+      - title
+      - description
+    properties:
+      title:
+        type: string
+      description:
+        type: string
+
+  edituserManual:
+    required:
+      - _id
+      - title
+      - description
+      - url
+    properties:
+      _id:
+        type: string
+      title:
+        type: string
+      description:
+        type: string
+      url:
+        type: string
+
+  deleteuserManual:
+    required:
+      - _id
+    properties:
+      _id:
+        type: string
+
+  addFeedback:
+    required:
+      - noOfStar
+      - feedbackMessage
+    properties:
+      noOfStar:
+        type: string
+      feedbackMessage:
+        type: string
+
+  addRequsetHelp:
+    required:
+      - name
+      - email
+      - message
+    properties:
+      name:
+        type: string
+      email:
+        type: string
+      message:
+        type: string
+
+  bookServiceV2:
+    required:
+      - serviceId
+      - quantity
+      - areaId
+    properties:
+      areaId:
+        type: string
+      service:
+        type: array
+        items:
+          type: object
+          properties:
+            serviceId:
+              type: string
+            quantity:
+              type: string
+
+  editNotification:
+    properties:
+      receipient:
+        type: string
+      templateName:
+        type: string
+      emailSubject:
+        type: string
+      emailBody:
+        type: string
+      message:
+        type: string
+      autoNotifyType:
+        type: array
+        items:
+          type: string
+
+  deleteNotiy:
+    required:
+      - metarialId
+    properties:
+      notificationId:
+        type: array
+        items:
+          type: string
+
+  deleteFAQ:
+    properties:
+      _id:
+        type: string
+
+  blockUnblockBanner:
+    required:
+      - _id
+    properties:
+      _id:
+        type: string

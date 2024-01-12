@@ -1,0 +1,43 @@
+{
+  "port": 2000,
+  "hostAddress": "172.16.6.52:2000/",
+  "databaseHost": "127.0.0.1",
+  "databasePort": "27017",
+  "databaseName": "move2earn-project-I",
+  "jwtsecret": "nodejwt",
+  "jwtresetsecret": "nodejwt",
+  "nodemailer": {
+    "service": "gmail",
+    "email": "mobiloitte.node@gmail.com",
+    "password": "wdbakhorlxmmqrhg"
+  },
+  "cloudinary": {
+    "cloud_name": "mobiloitte-technology-pvt-ltd",
+    "api_key": "853297846232233",
+    "api_secret": "tpO_ojOwIMukY77P7CIX7TF3xmM"
+  },
+  "jwtOptions": {
+    "expiresIn": "24h"
+  },
+  "emptra": {
+    "secretKey": "2iSqsIKQrGkEplyOiFd3KpFKbxfFh0eCy0B4UbzmDLQoyRbHpNMAVZkMrQVYCg8EW",
+    "clientId": "2110bad266d631a08fa815f695c0db8d:a88c2fec66062965bc808f99d56155d5",
+    "Cookie": "AWSALB=tBdxo2BvyW+ewEyT6iWQVqlPgaXG7An9+J36Mgu2dfX05VRG0sulnsPQTsbZfXH7Y1CqCx7J4XkM0Vlm9VxT6iY3pzT3kXV+oVDEhXfOS5YbT57FTzyIk9GNtjsj; AWSALBCORS=tBdxo2BvyW+ewEyT6iWQVqlPgaXG7An9+J36Mgu2dfX05VRG0sulnsPQTsbZfXH7Y1CqCx7J4XkM0Vlm9VxT6iY3pzT3kXV+oVDEhXfOS5YbT57FTzyIk9GNtjsj"
+  },
+  "swaggerDefinition": {
+    "info": {
+      "title": "Move2Earn Project-I",
+      "version": "2.0",
+      "description": "Move2Earn Project-I"
+    },
+
+    "basePath": "/api/v1",
+    "securityDefinitions": {
+      "tokenauth": {
+        "type": "apiKey",
+        "name": "Authorization",
+        "in": "header"
+      }
+    }
+  }
+}
