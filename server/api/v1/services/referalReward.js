@@ -1,6 +1,7 @@
 import userModel from "../../../models/user";
 import Transaction from "../../../models/transactions";
 import { createTransaction } from "../services/getAllUserReferrals";
+import Notify from "../../../models/notifications";
 
 async function systemAccount() {
   const user = await userModel.findOne({ userType: 'ADMIN' });
@@ -43,6 +44,14 @@ const referalServices = {
           indirectReferrer.internalWallet._id, // Credit to the referring user's internal wallet
           indirectReward
         );
+
+        const notificationMessage = `Your new referral is counted and referral ammount is added to your wallet`;
+
+        // Create a new notification
+        await Notify.create({
+          userId: indirectReferrer._id,
+          message: notificationMessage,
+        });
 
         indirectReferrer.internalWallet.amount += indirectReward;
         await indirectReferrer.internalWallet.save();

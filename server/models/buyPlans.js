@@ -49,7 +49,7 @@ Mongoose.model("buyPlans", buyPlansSchema).find({}, async (err, result) => {
       },
       {
         planName: "Plan-IV",
-        planAmount: 4000,
+        planAmount: 4500,
         minRange: 10001,
         maxRange: 9999999,
       },

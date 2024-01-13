@@ -1,5 +1,6 @@
 import userModel from "../../../models/user";
 import BuyPlan from "../../../models/buyPlans";
+import UserPurchasedPlan from "../../../models/userPurchasedPlan";
 import Transaction from "../../../models/transactions";
 import Notify from "../../../models/notifications";
 import InternalWallet from "../../../models/internalWallet";
@@ -136,6 +137,14 @@ const userServices = {
       directReward
     );
 
+    const notificationMessage = `Your new referral is counted and referral ammount is added to your wallet`;
+
+    // Create a new notification
+    await Notify.create({
+      userId: referringUser._id,
+      message: notificationMessage,
+    });
+
     referringUser.internalWallet.amount += directReward;
     await referringUser.internalWallet.save();
 
@@ -167,6 +176,14 @@ const userServices = {
           internalWalletId._id, // Credit to the referring user's internal wallet
           indirectReward
         );
+
+        const notificationMessage = `Your new referral is counted and referral ammount is added to your wallet`;
+
+        // Create a new notification
+        await Notify.create({
+          userId: indirectReferrer._id,
+          message: notificationMessage,
+        });
 
         indirectReferrer.internalWallet.amount += indirectReward;
         await indirectReferrer.internalWallet.save();
@@ -275,6 +292,18 @@ const userServices = {
 
   findPlan: async (query) => {
     return await BuyPlan.findOne(query);
+  },
+
+  findUpperLevelUser: async (userId) => {
+    return await userModel.findById(userId).populate("internalWallet");
+  },
+
+  findUsersPurchasedPlan: async (userId) => {
+    return await UserPurchasedPlan.findOne({
+      userId,
+      status: "Active",
+      planExpireTime: { $gt: new Date() }, // Check if plan is still active
+    });
   },
 };
 

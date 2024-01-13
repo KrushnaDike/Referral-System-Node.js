@@ -9,6 +9,7 @@ import status from "../../../../enums/status";
 import speakeasy from "speakeasy";
 import userType from "../../../../enums/userType";
 const secret = speakeasy.generateSecret({ length: 10 });
+import Notify from "../../../../models/notifications";
 
 // FOR CREATING TRANSATION
 import { referalServices } from "../../services/referalReward";
@@ -51,6 +52,8 @@ const {
   findOneAndDebit,
   findTransactions,
   findPlan,
+  findUpperLevelUser,
+  findUsersPurchasedPlan,
 } = userServices;
 
 // const notifications = require('../../../../helper/notification')
@@ -1335,6 +1338,13 @@ export class userController {
         throw apiError.notFound(responseMessage.USER_NOT_FOUND);
       }
 
+      // Check if the user already has an active plan
+      const activePlan = await findUsersPurchasedPlan(user._id);
+
+      if (activePlan) {
+        throw apiError.badRequest(responseMessage.ACTIVE_PLAN_EXISTS);
+      }
+
       // Fetch selected plan details
       const plan = await findPlan({ _id: planId });
       if (!plan) {
@@ -1369,6 +1379,19 @@ export class userController {
           plan.planAmount
         );
 
+        let planExpireTime;
+        if (plan.planAmount === 1000) {
+          planExpireTime = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); // 1 month
+        } else if (plan.planAmount === 2000) {
+          planExpireTime = new Date(Date.now() + 75 * 24 * 60 * 60 * 1000); // 2.5 months
+        } else if (plan.planAmount === 3000) {
+          planExpireTime = new Date(Date.now() + 105 * 24 * 60 * 60 * 1000); // 3.5 months
+        } else if (plan.planAmount === 4500) {
+          planExpireTime = new Date(Date.now() + 150 * 24 * 60 * 60 * 1000); // 5 months
+        } else {
+          console.log("plz choose correct plan");
+        }
+
         purchasedPlan = await UsersPurchasedPlan.create({
           userId: user._id,
           planId: plan._id,
@@ -1376,7 +1399,164 @@ export class userController {
           planName: plan.planName,
           planAmount: plan.planAmount,
           purchaseDate: new Date(),
+          planExpireTime,
         });
+
+        const notificationMessage = `Your Purchased Plan Name is ${plan.planName}, plan ammount is ${plan.planAmount} and plan will be expired at ${planExpireTime}`;
+
+        // Create a new notification
+        await Notify.create({
+          userId: user._id,
+          message: notificationMessage,
+        });
+
+        let referringUser;
+        let referringUserActivePlan;
+        if (user.referredBy) {
+          // Calculate commission amounts for referring users and upper-level users
+          referringUser = await findUpperLevelUser(user.referredBy);
+
+          if (referringUser) {
+            // Check if the user already has an active plan
+            referringUserActivePlan = await findUsersPurchasedPlan(
+              referringUser._id
+            );
+          }
+        }
+
+        const referringCommission = plan.planAmount * 0.05; // 5% commission for referring user
+
+        let upperLevelUser1;
+        let upperLevelUser1ActivePlan;
+        if (referringUser && referringUser.referredBy) {
+          // For upper-level users, calculate commission based on referral level
+          upperLevelUser1 = await findUpperLevelUser(referringUser.referredBy);
+
+          if (upperLevelUser1) {
+            // Check if the user already has an active plan
+            upperLevelUser1ActivePlan = await findUsersPurchasedPlan(
+              upperLevelUser1._id
+            );
+          }
+        }
+
+        let upperLevelUser2;
+        let upperLevelUser2ActivePlan;
+        if (upperLevelUser1 && upperLevelUser1.referredBy) {
+          upperLevelUser2 = await findUpperLevelUser(
+            upperLevelUser1.referredBy
+          );
+
+          if (upperLevelUser2) {
+            // Check if the user already has an active plan
+            upperLevelUser2ActivePlan = await findUsersPurchasedPlan(
+              upperLevelUser2._id
+            );
+          }
+        }
+
+        const upperLevelCommission1 = plan.planAmount * 0.04; // 4% commission for level 1 upper-level user
+        const upperLevelCommission2 = plan.planAmount * 0.03; // 3% commission for level 2 upper-level user
+
+        // Add commission amounts to the wallets of referring users and upper-level users
+        if (referringUser && referringUserActivePlan) {
+          referringUser.internalWallet.amount += referringCommission;
+          await referringUser.internalWallet.save();
+
+          const internalWalletId = await referringUser.internalWallet;
+
+          // Create a transaction for the credit amount
+          const referralTransaction = await createTransaction(
+            referringUser._id,
+            internalWalletId._id,
+            "credit",
+            await systemAccount(), // Replace with the actual system account ID
+            internalWalletId._id, // Credit to the referring user's internal wallet
+            referringCommission
+          );
+
+          const notificationMessage = `Commission Ammount ${referringCommission}₹ is added to your wallet`;
+
+          // Create a new notification
+          await Notify.create({
+            userId: referringUser._id,
+            message: notificationMessage,
+          });
+        } else if(!referringUserActivePlan) {
+          const notificationMessage = `Your Plan is not active so you have missed ${referringCommission}₹ Commission of referal user, Purchase Plan To get Commission!`;
+
+          // Create a new notification
+          await Notify.create({
+            userId: referringUser._id,
+            message: notificationMessage,
+          });
+        }
+
+        if (upperLevelUser1 && upperLevelUser1ActivePlan) {
+          upperLevelUser1.internalWallet.amount += upperLevelCommission1;
+          await upperLevelUser1.internalWallet.save();
+
+          const internalWalletId = await upperLevelUser1.internalWallet;
+
+          // Create a transaction for the credit amount
+          const referralTransaction = await createTransaction(
+            upperLevelUser1._id,
+            internalWalletId._id,
+            "credit",
+            await systemAccount(), // Replace with the actual system account ID
+            internalWalletId._id, // Credit to the referring user's internal wallet
+            upperLevelCommission1
+          );
+
+          const notificationMessage = `Commission Ammount ${upperLevelCommission1}₹ is added to your wallet`;
+
+          // Create a new notification
+          await Notify.create({
+            userId: upperLevelCommission1._id,
+            message: notificationMessage,
+          });
+        } else if(!upperLevelUser1ActivePlan) {
+          const notificationMessage = `Your Plan is not active so you have missed ${upperLevelCommission1}₹ Commission of referal user, Purchase Plan To get Commission!`;
+
+          // Create a new notification
+          await Notify.create({
+            userId: upperLevelCommission1._id,
+            message: notificationMessage,
+          });
+        }
+
+        if (upperLevelUser2 && upperLevelUser2ActivePlan) {
+          upperLevelUser2.internalWallet.amount += upperLevelCommission2;
+          await upperLevelUser2.internalWallet.save();
+
+          const internalWalletId = await upperLevelUser2.internalWallet;
+
+          // Create a transaction for the credit amount
+          const referralTransaction = await createTransaction(
+            upperLevelUser2._id,
+            internalWalletId._id,
+            "credit",
+            await systemAccount(), // Replace with the actual system account ID
+            internalWalletId._id, // Credit to the referring user's internal wallet
+            upperLevelCommission2
+          );
+
+          const notificationMessage = `Commission Ammount ${upperLevelUser2}₹ is added to your wallet`;
+
+          // Create a new notification
+          await Notify.create({
+            userId: upperLevelUser2._id,
+            message: notificationMessage,
+          });
+        } else if(!upperLevelUser2ActivePlan) {
+          const notificationMessage = `Your Plan is not active so you have missed ${upperLevelCommission2}₹ Commission of referal user, Purchase Plan To get Commission!`;
+
+          // Create a new notification
+          await Notify.create({
+            userId: upperLevelCommission2._id,
+            message: notificationMessage,
+          });
+        }
       }
 
       return res.json(
