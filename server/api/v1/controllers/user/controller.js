@@ -1512,7 +1512,7 @@ export class userController {
 
           // Create a new notification
           await Notify.create({
-            userId: upperLevelCommission1._id,
+            userId: upperLevelUser1._id,
             message: notificationMessage,
           });
         } else if(!upperLevelUser1ActivePlan) {
@@ -1520,7 +1520,7 @@ export class userController {
 
           // Create a new notification
           await Notify.create({
-            userId: upperLevelCommission1._id,
+            userId: upperLevelUser1._id,
             message: notificationMessage,
           });
         }
@@ -1553,7 +1553,7 @@ export class userController {
 
           // Create a new notification
           await Notify.create({
-            userId: upperLevelCommission2._id,
+            userId: upperLevelUser2._id,
             message: notificationMessage,
           });
         }
