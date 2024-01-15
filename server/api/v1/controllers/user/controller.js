@@ -1127,6 +1127,14 @@ export class userController {
         amount
       );
 
+      const notificationMessage = `${amount}₹ credited to your account.`;
+
+      // Create a new notification
+      await Notify.create({
+        userId: user._id,
+        message: notificationMessage,
+      });
+
       return res.json(new response(Wallet, "User Wallet"));
     } catch (error) {
       return next(error);
@@ -1208,6 +1216,14 @@ export class userController {
         await systemAccount(), // Replace with the actual system account ID
         amount
       );
+
+      const notificationMessage = `${amount}₹ debited from your account.`;
+
+      // Create a new notification
+      await Notify.create({
+        userId: user._id,
+        message: notificationMessage,
+      });
 
       return res.json(new response(wallet, "User Transactions"));
     } catch (error) {
@@ -1482,7 +1498,7 @@ export class userController {
             userId: referringUser._id,
             message: notificationMessage,
           });
-        } else if(!referringUserActivePlan) {
+        } else if (!referringUserActivePlan && referringUser) {
           const notificationMessage = `Your Plan is not active so you have missed ${referringCommission}₹ Commission of referal user, Purchase Plan To get Commission!`;
 
           // Create a new notification
@@ -1515,7 +1531,7 @@ export class userController {
             userId: upperLevelUser1._id,
             message: notificationMessage,
           });
-        } else if(!upperLevelUser1ActivePlan) {
+        } else if (!upperLevelUser1ActivePlan && upperLevelUser1) {
           const notificationMessage = `Your Plan is not active so you have missed ${upperLevelCommission1}₹ Commission of referal user, Purchase Plan To get Commission!`;
 
           // Create a new notification
@@ -1541,14 +1557,14 @@ export class userController {
             upperLevelCommission2
           );
 
-          const notificationMessage = `Commission Ammount ${upperLevelUser2}₹ is added to your wallet`;
+          const notificationMessage = `Commission Ammount ${upperLevelCommission2}₹ is added to your wallet`;
 
           // Create a new notification
           await Notify.create({
             userId: upperLevelUser2._id,
             message: notificationMessage,
           });
-        } else if(!upperLevelUser2ActivePlan) {
+        } else if (!upperLevelUser2ActivePlan && upperLevelUser2) {
           const notificationMessage = `Your Plan is not active so you have missed ${upperLevelCommission2}₹ Commission of referal user, Purchase Plan To get Commission!`;
 
           // Create a new notification

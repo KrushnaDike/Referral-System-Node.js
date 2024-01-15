@@ -79,11 +79,6 @@ var userModel = new Schema(
       ref: "User",
     },
 
-    wallet: {
-      type: Number,
-      default: 0,
-    }, // New field for the wallet
-
     internalWallet: {
       type: Mongoose.Schema.Types.ObjectId,
       ref: "InternalWallet",
